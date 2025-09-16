@@ -1,0 +1,11 @@
+/* Make the app host fill the viewport and stack header/main/footer */
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* ensures footer sits at bottom on short pages */
+}
+
+/* Let main consume remaining space between header and footer */
+main {
+  flex: 1 0 auto;
+}

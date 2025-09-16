@@ -1,1 +1,721 @@
-/* You can add global styles to this file, and also import other style files */
+/* ==========================================================================
+   KUH LABS – Global Styles (styles.scss)
+   --------------------------------------------------------------------------
+   • Theme tokens (SCSS vars + CSS custom properties)
+   • Light/Dark mode (prefers-color-scheme + [data-theme])
+   • Base resets, typography, containers
+   • Components: buttons, cards, chips, links, inputs, tables
+   • Utilities: spacing, layout, shadows, radii
+   • Wordmark helpers (underline gradient)
+   ========================================================================== */
+
+@use "sass:color";
+/* --------------------------------------------------------------------------
+   0) SCSS TOKENS (compile-time)
+   -------------------------------------------------------------------------- */
+$kl-brown-500: #a66a3f;
+$kl-cream-50: #faf3e0;
+$kl-text-dark: #1e1b16;
+$kl-text-light: #fff7eb;
+$kl-bg-light: #f7f2e9;
+$kl-bg-dark: #1f1711;
+
+$kl-radius: 12px;
+$kl-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+$kl-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+/* Font stacks */
+$font-brand: "Permanent Marker", system-ui, -apple-system, "Segoe UI", Roboto,
+  Arial, sans-serif;
+$font-base: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial,
+  sans-serif;
+
+/* Breakpoints */
+$bp-sm: 640px;
+$bp-md: 768px;
+$bp-lg: 1024px;
+$bp-xl: 1280px;
+
+/* --------------------------------------------------------------------------
+   1) CSS CUSTOM PROPERTIES (runtime theming)
+   -------------------------------------------------------------------------- */
+:root {
+  /* Brand */
+  --kl-brown-500: #{$kl-brown-500};
+  --kl-cream-50: #{$kl-cream-50};
+
+  /* Text */
+  --kl-text: #{$kl-text-dark};
+  --kl-text-inv: #{$kl-text-light};
+
+  /* Backgrounds */
+  --kl-bg: #{$kl-bg-light};
+  --kl-bg-elev: #fff; /* elevated containers on light */
+
+  /* Effects */
+  --kl-radius: #{$kl-radius};
+  --kl-shadow: #{$kl-shadow};
+  --kl-shadow-sm: #{$kl-shadow-sm};
+
+  /* Component tokens */
+  --kl-border: rgba(30, 27, 22, 0.12);
+  --kl-link: #{$kl-brown-500};
+  --kl-link-hover: #{color.mix(#000, $kl-brown-500, 12%)};
+
+  /* Brand positioning defaults */
+  --container-max: 1200px;
+  --brand-left: 64px; /* shift text right to make room for logo on the left */
+  --brand-top: 14px; /* nudge down for better vertical centering in header */
+  --brand-center-offset: 140px; /* vertikaler Offset, damit Brand über den Buttons steht */
+  --brand-center-x-offset: 0px; /* Feinkorrektur für absolute Zentrierung (falls optisch off) */
+  /* Default linker Rand des zentrierten Containers + Padding, ohne JS-Messung */
+  --brand-container-left: calc((100vw - min(100vw, var(--container-max))) / 2 + 1rem);
+
+  /* Background accents (light) */
+  --kl-bg-grad: linear-gradient(
+    180deg,
+    #{color.mix(#fff, $kl-bg-light, 80%)} 0%,
+    #{$kl-bg-light} 60%,
+    #{color.mix(#000, $kl-bg-light, 4%)} 100%
+  );
+  --kl-bg-spot-1: radial-gradient(
+    1200px 700px at 20% 12%,
+    rgba(166, 106, 63, 0.06),
+    transparent 60%
+  );
+  --kl-bg-spot-2: radial-gradient(
+    800px 500px at 82% 28%,
+    rgba(166, 106, 63, 0.05),
+    transparent 65%
+  );
+}
+
+/* Auto dark-mode fallback – nur wenn KEIN manuelles data-theme gesetzt ist */
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) {
+    --kl-text: #{$kl-text-light};
+    --kl-text-inv: #{$kl-text-light};
+    --kl-bg: #{$kl-bg-dark};
+    --kl-bg-elev: #201812;
+    --kl-border: rgba(255, 247, 235, 0.1);
+    --kl-link: #{$kl-cream-50};
+    --kl-link-hover: #{color.mix(#000, $kl-cream-50, 20%)};
+    --kl-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+    --kl-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+  }
+}
+
+/* Manual toggle: <html data-theme="dark"> */
+:root[data-theme="dark"] {
+  /* Wärmeres, etwas helleres Dark Theme */
+  --kl-text: #fff4e6; /* warmes, weiches Weiß */
+  --kl-text-inv: #fff7eb;
+  --kl-bg: #2c231c; /* eine Stufe heller */
+  --kl-bg-elev: #342a22; /* erhöhte Flächen etwas heller */
+  --kl-border: rgba(255, 240, 224, 0.2);
+  --kl-link: #f3dec6;
+  --kl-link-hover: #{color.mix(#000, $kl-cream-50, 25%)};
+  --kl-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  --kl-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.22);
+
+  /* Background accents (dark) */
+  --kl-bg-grad: linear-gradient(
+    180deg,
+    #{color.mix(#000, $kl-bg-dark, 8%)} 0%,
+    #{$kl-bg-dark} 55%,
+    #{color.mix(#fff, $kl-bg-dark, 6%)} 100%
+  );
+  --kl-bg-spot-1: radial-gradient(
+    1200px 700px at 20% 12%,
+    rgba(255, 243, 230, 0.05),
+    transparent 60%
+  );
+  --kl-bg-spot-2: radial-gradient(
+    800px 500px at 82% 28%,
+    rgba(255, 243, 230, 0.045),
+    transparent 65%
+  );
+}
+
+/* --------------------------------------------------------------------------
+   2) CSS RESET + BASE
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  scroll-behavior: smooth;
+  background: var(--kl-bg-grad), var(--kl-bg-spot-1), var(--kl-bg-spot-2),
+    var(--kl-bg);
+  color: var(--kl-text);
+  font-family: $font-base;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+}
+
+img,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+/* Remove previous cow-spot mask layer */
+
+a {
+  color: var(--kl-link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+a:hover {
+  color: var(--kl-link-hover);
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 0 0.5rem;
+  line-height: 1.2;
+  font-weight: 700;
+}
+h1 {
+  font-size: clamp(1.75rem, 1.3rem + 2vw, 3rem);
+}
+h2 {
+  font-size: clamp(1.5rem, 1.1rem + 1.2vw, 2.25rem);
+}
+h3 {
+  font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.75rem);
+}
+
+p {
+  margin: 0 0 1rem;
+}
+
+/* Containers */
+.container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 1rem;
+  max-width: 1200px;
+}
+
+/* Spacing utilities */
+.mt-0 {
+  margin-top: 0 !important;
+}
+.mb-0 {
+  margin-bottom: 0 !important;
+}
+.mt-2 {
+  margin-top: 0.5rem !important;
+}
+.mb-2 {
+  margin-bottom: 0.5rem !important;
+}
+.mt-4 {
+  margin-top: 1rem !important;
+}
+.mb-4 {
+  margin-bottom: 1rem !important;
+}
+.mt-6 {
+  margin-top: 1.5rem !important;
+}
+.mb-6 {
+  margin-bottom: 1.5rem !important;
+}
+.mt-8 {
+  margin-top: 2rem !important;
+}
+.mb-8 {
+  margin-bottom: 2rem !important;
+}
+.pt-4 {
+  padding-top: 1rem !important;
+}
+.pb-4 {
+  padding-bottom: 1rem !important;
+}
+
+/* Layout helpers */
+.flex {
+  display: flex;
+}
+.items-center {
+  align-items: center;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.grid {
+  display: grid;
+}
+.gap-4 {
+  gap: 1rem;
+}
+.gap-6 {
+  gap: 1.5rem;
+}
+.rounded {
+  border-radius: var(--kl-radius);
+}
+.shadow {
+  box-shadow: var(--kl-shadow);
+}
+.shadow-sm {
+  box-shadow: var(--kl-shadow-sm);
+}
+
+/* --------------------------------------------------------------------------
+   3) BRAND APPLICATION
+   -------------------------------------------------------------------------- */
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  img,
+  svg {
+    height: 40px;
+    width: auto;
+  }
+  .wordmark {
+    font-family: $font-brand;
+    font-size: clamp(1.5rem, 1.1rem + 1vw, 2.25rem);
+  }
+}
+
+/* Wordmark color helpers */
+.wordmark__kuh {
+  color: var(--kl-brown-500);
+}
+.wordmark__labs {
+  color: var(--kl-cream-50);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
+}
+/* Optional thin outline for LABS on light BGs */
+.wordmark__labs--outline {
+  -webkit-text-stroke: 0.75px rgba(166, 106, 63, 0.85);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.05), 0 0 1px rgba(166, 106, 63, 0.25);
+}
+
+/* Underline gradient */
+.wordmark-underline {
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--kl-brown-500) 0%,
+    var(--kl-cream-50) 100%
+  );
+}
+
+/* Dark mode inversion for underline (optional) */
+:root[data-theme="dark"] .wordmark-underline {
+  background: linear-gradient(
+    90deg,
+    var(--kl-cream-50) 0%,
+    var(--kl-brown-500) 100%
+  );
+}
+
+/* --------------------------------------------------------------------------
+   4) COMPONENTS
+   -------------------------------------------------------------------------- */
+
+/* Buttons */
+.btn {
+  --_bg: var(--kl-brown-500);
+  --_fg: var(--kl-cream-50);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  border: 1px solid transparent;
+  border-radius: var(--kl-radius);
+  background: var(--_bg);
+  color: var(--_fg);
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--kl-shadow-sm);
+  transition: transform 0.06s ease, filter 0.2s ease, box-shadow 0.2s ease;
+}
+.btn:hover {
+  filter: brightness(0.97);
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn:focus {
+  outline: 2px solid color-mix(in srgb, var(--_bg), #fff 25%);
+  outline-offset: 2px;
+}
+
+.btn--ghost {
+  --_bg: transparent;
+  --_fg: var(--kl-brown-500);
+  border-color: var(--kl-brown-500);
+  background: transparent;
+}
+:root[data-theme="dark"] .btn--ghost {
+  --_fg: var(--kl-cream-50);
+  border-color: var(--kl-cream-50);
+}
+
+.btn--inverse {
+  --_bg: var(--kl-cream-50);
+  --_fg: var(--kl-brown-500);
+}
+
+/* Badges / Chips */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--kl-brown-500), transparent 85%);
+  color: var(--kl-brown-500);
+  font-size: 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--kl-brown-500), transparent 70%);
+}
+:root[data-theme="dark"] .badge {
+  background: color-mix(in srgb, var(--kl-cream-50), transparent 85%);
+  color: var(--kl-cream-50);
+  border-color: color-mix(in srgb, var(--kl-cream-50), transparent 70%);
+}
+
+/* Cards */
+.card {
+  background: var(--kl-bg-elev);
+  color: var(--kl-text);
+  border: 1px solid var(--kl-border);
+  border-radius: var(--kl-radius);
+  box-shadow: var(--kl-shadow-sm);
+  padding: 1rem;
+}
+.card--hover:hover {
+  box-shadow: var(--kl-shadow);
+  transform: translateY(-1px);
+  transition: 0.2s ease;
+}
+
+/* Inputs */
+.input,
+input[type="text"],
+input[type="email"],
+input[type="search"],
+textarea,
+select {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  background: var(--kl-bg-elev);
+  color: var(--kl-text);
+  border: 1px solid var(--kl-border);
+  border-radius: calc(var(--kl-radius) - 4px);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.input:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: color-mix(in srgb, var(--kl-brown-500), #fff 30%);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--kl-brown-500), transparent 80%);
+}
+
+/* Tables */
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--kl-border);
+  border-radius: var(--kl-radius);
+  overflow: hidden;
+  font-size: 0.95rem;
+}
+.table thead th {
+  background: color-mix(in srgb, var(--kl-brown-500), transparent 92%);
+  text-align: left;
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--kl-border);
+  font-weight: 700;
+}
+.table tbody td {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--kl-border);
+}
+.table tbody tr:hover {
+  background: color-mix(in srgb, var(--kl-brown-500), transparent 96%);
+}
+
+/* Alerts */
+.alert {
+  padding: 0.75rem 1rem;
+  border-radius: var(--kl-radius);
+  border: 1px solid var(--kl-border);
+  background: color-mix(in srgb, var(--kl-brown-500), transparent 92%);
+}
+.alert--success {
+  background: color-mix(in srgb, #2ecc71, transparent 90%);
+  border-color: color-mix(in srgb, #2ecc71, transparent 70%);
+}
+.alert--warn {
+  background: color-mix(in srgb, #f1c40f, transparent 90%);
+  border-color: color-mix(in srgb, #f1c40f, transparent 70%);
+}
+.alert--danger {
+  background: color-mix(in srgb, #e74c3c, transparent 90%);
+  border-color: color-mix(in srgb, #e74c3c, transparent 70%);
+}
+
+/* Nav Bar example */
+.navbar {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  backdrop-filter: none;
+  background: transparent;
+}
+.navbar--minimal {
+  border-bottom-color: color-mix(in srgb, var(--kl-border), transparent 70%);
+}
+.navbar__bg {
+  position: absolute;
+  inset: 0;
+  background: var(--kl-bg);
+  opacity: var(--header-fade, 1);
+  transition: opacity 120ms linear;
+  pointer-events: none;
+  z-index: 0;
+}
+/* Disable transitions during boot to prevent initial flash */
+:root[data-boot="1"] .navbar__bg,
+:root[data-boot="1"] .bar-logo,
+:root[data-boot="1"] .brand-slot {
+  transition: none !important;
+}
+.navbar__border {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--kl-border);
+  opacity: var(--header-fade, 1);
+  transition: opacity 120ms linear;
+  pointer-events: none;
+  z-index: 1;
+}
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* left brand (logo + wordmark) + right actions */
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Group logo and wordmark inline in the header */
+.brand-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Brand wordmark in header: inline next to logo */
+.brand-slot {
+  position: static;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+/* Header left logo (always visible on subpages; fades in on home while scrolling) */
+.bar-logo {
+  display: block;
+  height: clamp(1.4rem, 1.1rem + 1.1vw, 2.1rem);
+  width: auto;
+  align-self: center; /* in the flex header bar */
+}
+:root[data-home="1"] .bar-logo {
+  opacity: clamp(0, var(--header-fade, 1), 1);
+  transition: opacity 180ms linear;
+}
+/* Make header wordmark fade with the logo on home */
+:root[data-home="1"] .brand-slot {
+  opacity: clamp(0, var(--header-fade, 1), 1);
+  transition: opacity 180ms linear;
+}
+/* No fly-in: brand-slot is static in header */
+
+/* initial-centering helper no longer used */
+
+/* Remove old home fly-in and fade rules */
+
+/* Subpages / Header-Position: X-Offset rechts vom linken Rand (ohne left:) */
+/* No subpage transform for brand-slot */
+
+/* Remove old initial centering override (no longer needed when inline) */
+/* (kept intentionally minimal; position: static ignores left/transform anyway) */
+.brand-slot__wordmark {
+  display: inline-flex;
+  gap: 0.4rem;
+  align-items: center;
+  font-family: "Permanent Marker", system-ui, -apple-system, "Segoe UI", Roboto,
+    Arial, sans-serif;
+  font-size: clamp(1.4rem, 1.1rem + 1.1vw, 2.1rem);
+  line-height: 1;
+}
+.brand-slot__wordmark::after {
+  content: "";
+  display: block;
+  height: 6px;
+  border-radius: 999px;
+  margin-top: 6px;
+  background: linear-gradient(90deg, var(--kl-brown-500), var(--kl-cream-50));
+  opacity: 1;
+}
+
+/* Hero-only logo above the centered wordmark (does not fly) */
+/* Removed old fixed hero logo styling */
+.brand-slot__kuh {
+  color: var(--kl-brown-500);
+}
+.brand-slot__labs {
+  color: var(--kl-cream-50);
+  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.2);
+}
+
+.header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.header-btn {
+  appearance: none;
+  background: transparent;
+  color: var(--kl-text);
+  border: 1px solid color-mix(in srgb, var(--kl-text), transparent 80%);
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  box-shadow: none;
+  cursor: pointer;
+}
+.header-btn:hover {
+  background: color-mix(in srgb, var(--kl-brown-500), transparent 90%);
+}
+
+/* Ensure custom element wrapper behaves like a block container */
+kl-header {
+  display: block;
+  width: 100%;
+  position: -webkit-sticky; /* ensure stickiness on the wrapper as well */
+  position: sticky;
+  top: 0;
+  z-index: 50; /* above hero visuals */
+}
+
+/* Footer */
+.footer {
+  margin-top: 3rem;
+  padding: 2rem 1rem;
+  border-top: 1px solid var(--kl-border);
+  color: color-mix(in srgb, var(--kl-text), transparent 15%);
+}
+
+/* --------------------------------------------------------------------------
+   5) ACCESSIBILITY
+   -------------------------------------------------------------------------- */
+:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--kl-brown-500), #fff 25%);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   6) WORDMARK SPECIFIC (optional helpers)
+   -------------------------------------------------------------------------- */
+.wordmark {
+  font-family: $font-brand;
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.wordmark__kuh {
+  color: var(--kl-brown-500);
+}
+.wordmark__labs {
+  color: var(--kl-cream-50);
+  /* Optional outline for better contrast on very light BGs */
+  -webkit-text-stroke: 0.5px rgba(166, 106, 63, 0.85);
+}
+
+.wordmark__underline {
+  display: block;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--kl-brown-500) 0%,
+    var(--kl-cream-50) 100%
+  );
+  margin-top: 0.25rem;
+}
+
+:root[data-theme="dark"] .wordmark__labs {
+  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.25);
+}
+
+/* --------------------------------------------------------------------------
+   7) ANGULAR SPECIFICS (optional)
+   -------------------------------------------------------------------------- */
+/* Provide a base look for router links */
+a[routerLink] {
+  cursor: pointer;
+}
+
+/* Route transitions (optional, add classes via Router animations) */
+.route-enter {
+  opacity: 0;
+  transform: translateY(6px);
+}
+.route-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Simple toast placeholder */
+.toast {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 50;
+  background: var(--kl-bg-elev);
+  color: var(--kl-text);
+  border: 1px solid var(--kl-border);
+  border-radius: var(--kl-radius);
+  box-shadow: var(--kl-shadow);
+  padding: 0.75rem 1rem;
+}

@@ -1,0 +1,3 @@
+[submodule "external/tools/randomizer"]
+	path = external/tools/randomizer
+	url = https://github.com/DasRind/JuggerRandomizedLineupGenerator.git

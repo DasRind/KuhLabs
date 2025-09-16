@@ -7,7 +7,18 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:KuhLabs": "node dist/KuhLabs/server/server.mjs"
+    "serve:ssr:KuhLabs": "node dist/KuhLabs/server/server.mjs",
+    "dev:ssr": "ng run KuhLabs:serve-ssr",
+    "build:ssr": "ng run KuhLabs:build-ssr",
+    "precompress": "node scripts/precompress.mjs dist/KuhLabs/browser",
+    "build:ssr+compress": "npm run build:ssr && npm run precompress",
+    "serve:ssr": "node dist/KuhLabs/server/server.mjs",
+    "prerender": "ng run KuhLabs:prerender",
+    "tools:build": "node scripts/tools-build.mjs",
+    "tools:sync": "node scripts/tools-sync.mjs",
+    "tools:prepare": "npm run tools:build && FORCE=1 npm run tools:sync",
+    "tools:update": "git submodule update --remote --merge --recursive",
+    "tools:refresh": "npm run tools:update && npm run tools:prepare"
   },
   "prettier": {
     "overrides": [

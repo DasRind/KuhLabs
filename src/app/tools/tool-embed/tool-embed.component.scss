@@ -1,0 +1,53 @@
+.frame-wrap {
+  width: 100%;
+  height: calc(100vh - 220px);
+  min-height: 520px;
+  border: 1px solid var(--kl-border);
+  border-radius: var(--kl-radius);
+  overflow: hidden;
+  box-shadow: var(--kl-shadow-sm);
+  background: var(--kl-bg-elev);
+  /* Prevent scroll chaining to the outer page when the inner frame scrolls */
+  overscroll-behavior: contain;
+}
+iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: var(--kl-bg-elev);
+}
+
+.tool-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+.tool-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.back-btn {
+  appearance: none;
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--kl-text), transparent 80%);
+  border-radius: 999px;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--kl-text);
+  cursor: pointer;
+}
+.back-btn:hover {
+  background: color-mix(in srgb, var(--kl-brown-500), transparent 90%);
+}
+.tool-desc {
+  margin-top: 0.25rem;
+}
+
+.subtitle {
+  opacity: 0.9;
+}

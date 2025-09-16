@@ -1,0 +1,36 @@
+<header class="navbar navbar--minimal">
+  <div class="navbar__bg" aria-hidden="true"></div>
+  <div class="navbar__border" aria-hidden="true"></div>
+  <div class="navbar__inner container">
+    <div class="brand-wrap">
+      <img class="bar-logo" src="/assets/brand/kuhlabslogov2.png" alt="" aria-hidden="true" />
+      <a class="brand-slot" routerLink="/" href="/" aria-label="Startseite" (click)="onBrandClick($event)">
+        <span class="brand-slot__wordmark">
+          <span class="brand-slot__kuh">KUH</span>
+          <span class="brand-slot__labs">LABS</span>
+        </span>
+      </a>
+    </div>
+
+    <!-- Header-Action: nur Theme Toggle -->
+    <nav class="header-actions">
+      <button
+        class="header-btn"
+        type="button"
+        (click)="toggleTheme()"
+        [attr.aria-label]="theme.isDark ? 'Hellen Modus aktivieren' : 'Dunklen Modus aktivieren'"
+        title="{{ theme.isDark ? 'Hellen Modus aktivieren' : 'Dunklen Modus aktivieren' }}"
+      >
+        <!-- Sun icon (shown only in dark mode → indicates switching to light) -->
+        <svg *ngIf="theme.isDark" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5.64 5.64 4.22 4.22M19.78 19.78l-1.42-1.42M18.36 5.64l1.42-1.42M4.22 19.78l1.42-1.42" />
+        </svg>
+        <!-- Moon icon (shown only in light mode → indicates switching to dark) -->
+        <svg *ngIf="!theme.isDark" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+      </button>
+    </nav>
+  </div>
+  </header>

@@ -1,0 +1,45 @@
+<div class="container mt-8">
+  @if (tool; as v) {
+    <section class="mb-4">
+      <div class="tool-bar">
+        <div class="tool-left">
+          <button class="back-btn" type="button" (click)="back()" aria-label="Zurück" title="Zurück">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+          <h2 class="mb-0">{{ v.title }}</h2>
+        </div>
+        @if (v.externalUrl) {
+          <a class="btn btn--ghost" [href]="v.externalUrl" target="_blank" rel="noopener" title="Extern öffnen" aria-label="Extern öffnen">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 13v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <polyline points="15 3 21 3 21 9"/>
+              <line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+            <span style="margin-left: 0.4rem;">Extern</span>
+          </a>
+        }
+      </div>
+      @if (v.description) {
+        <div class="tool-desc">
+          <p class="mt-2 subtitle">{{ v.description }}</p>
+        </div>
+      }
+    </section>
+
+    @if (safeUrl) {
+      <div class="frame-wrap">
+        <iframe #frame [src]="safeUrl" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin"></iframe>
+      </div>
+    } @else {
+      <div class="alert alert--warn">
+        Für dieses Tool ist noch keine URL hinterlegt. Bitte in
+        <code>src/app/tools/tools.data.ts</code> die <code>externalUrl</code>
+        setzen.
+      </div>
+    }
+  } @else {
+    <div class="alert alert--danger">Dieses Tool wurde nicht gefunden.</div>
+  }
+</div>

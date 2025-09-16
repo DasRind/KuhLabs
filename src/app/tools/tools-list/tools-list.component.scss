@@ -1,0 +1,80 @@
+/* Tools list page styles */
+
+.tools-grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.tool-card {
+  display: flex; /* simpler, avoids grid sizing issues */
+  align-items: center; /* vertically center thumbnail relative to content */
+  gap: 1rem;
+  text-decoration: none;
+}
+.tool-card .thumb {
+  flex: 0 0 128px; /* fixed column width */
+  width: 128px;
+  aspect-ratio: 1 / 1; /* keep perfectly square */
+  border-radius: 8px; /* slightly rounded corners */
+  background: color-mix(in srgb, var(--kl-bg-elev), var(--kl-text) 6%);
+  background-size: cover;
+  background-position: center;
+  border: 1px solid var(--kl-border);
+  align-self: center; /* ensure vertical centering relative to card height */
+  display: block;
+}
+@media (min-width: 640px) {
+  /* sm */
+  .tool-card .thumb {
+    flex-basis: 136px;
+    width: 136px;
+  }
+}
+@media (min-width: 960px) {
+  /* md+ */
+  .tool-card .thumb {
+    flex-basis: 152px;
+    width: 152px;
+  }
+}
+.tool-card .content {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+.tool-card .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.tool-card .action {
+  opacity: 0.8;
+  align-self: flex-start;
+  margin-top: auto; /* sit below tags/text within same content column */
+}
+
+/* Header with back button */
+.list-bar {
+  display: flex;
+  align-items: center; /* align chevron and title on the same baseline visually */
+  gap: 0.75rem;
+}
+.subtitle {
+  opacity: 0.9;
+}
+.back-btn {
+  appearance: none;
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--kl-text), transparent 80%);
+  border-radius: 999px;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--kl-text);
+  cursor: pointer;
+}
+.back-btn:hover {
+  background: color-mix(in srgb, var(--kl-brown-500), transparent 90%);
+}

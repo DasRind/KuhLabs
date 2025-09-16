@@ -1,13 +1,75 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>KuhLabs</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-</head>
-<body>
-  <app-root></app-root>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <title>Kuh Labs</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="assets/brand/kuhlabslogov2.ico"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Inter:wght@400;600;700&display=swap"
+      onload="this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Inter:wght@400;600;700&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
+    <meta name="theme-color" content="#A66A3F" />
+    <meta property="og:title" content="KUH LABS" />
+    <meta
+      property="og:description"
+      content="Zentraler Hub für Tools, Demos und Projekte von Das Rind."
+    />
+    <meta property="og:image" content="/assets/logo/kuh-labs-icon.svg" />
+  </head>
+  <body>
+    <script>
+      (function initDoc() {
+        try {
+          var doc = document.documentElement;
+          // Temporarily disable transitions during first paint to avoid flashes
+          doc.setAttribute("data-boot", "1");
+          // Apply saved theme early to avoid flash
+          var saved = localStorage.getItem("theme");
+          var mode =
+            saved ||
+            (window.matchMedia &&
+            matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light");
+          doc.setAttribute("data-theme", mode);
+          // Mark home route early to avoid header flicker on landing
+          if (
+            location &&
+            (location.pathname === "/" || location.pathname === "")
+          ) {
+            doc.setAttribute("data-home", "1");
+            // Initialize header fade based on current scroll to prevent flash
+            var y = (window.scrollY || doc.scrollTop || 0);
+            var viewport = (window.innerHeight || 1);
+            var p = Math.max(0, Math.min(1, (y / viewport) * 2.4));
+            doc.style.setProperty("--header-fade", p.toFixed(4));
+          }
+          // Initialize hero variables
+          doc.style.setProperty("--hero-p", "0");
+          doc.style.setProperty("--hero-move", "0");
+          // Re-enable transitions on next frame
+          requestAnimationFrame(function () {
+            doc.removeAttribute("data-boot");
+          });
+        } catch (e) {}
+      })();
+    </script>
+    <app-root></app-root>
+  </body>
 </html>

@@ -1,0 +1,36 @@
+<div class="container mt-8">
+  <section class="mb-4 list-header">
+    <div class="list-bar">
+      <button class="back-btn" type="button" (click)="back()" aria-label="Zurück" title="Zurück">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      <h2 class="mb-0">{{ title() }}</h2>
+    </div>
+    <p class="mt-2 subtitle">Sammlung deiner Tools – zentral auf einer Seite.</p>
+  </section>
+
+  <div class="grid gap-6 tools-grid">
+    @for (tool of tools(); track tool.slug) {
+      <a class="card card--hover tool-card"
+         [routerLink]="['/tools', tool.slug]"
+         [state]="{ fromTag: tag() }"
+         title="{{ tool.title }}">
+        <div class="thumb" [style.background-image]="tool.icon ? 'url(' + tool.icon + ')' : null"></div>
+        <div class="content">
+          <h3 class="mb-2">{{ tool.title }}</h3>
+          @if (tool.description) { <p class="mt-2">{{ tool.description }}</p> }
+          @if (tool.tags?.length) {
+            <div class="mt-4 tags">
+              @for (tag of tool.tags; track tag) {
+                <span class="badge">{{ tag }}</span>
+              }
+            </div>
+          }
+          <div class="mt-4 action">→ öffnen</div>
+        </div>
+      </a>
+    }
+  </div>
+</div>

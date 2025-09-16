@@ -1,0 +1,27 @@
+Analytics tool
+Record new Game
+    2 Teams, jeweils links und rechts.
+    Entweder import team oder create team
+    Logo + Teamname in Kopfzeile
+    Danach Spieler-"zellen", die dann auch im Tool genutzt werden
+    in der mitte jugger feld
+    Man wählt:
+    neuer Zug
+    Man wählt pro team wer in der Runde drinnen ist und die werden in die mitte animiert.
+    Man wählt duell gewonnen oder verloren oder doppel
+    und in der Kopfzeile Wer gewonnen hat oder ob abbruch (slider (oben drüber "Gewinner"): Teamname A - Abbruch - Teamname B
+    Neuer Zug Button tut die Spieler wieder zu den Teams
+    Solange keine 5 Spieler auf dem Feld steht in der Mitte: "Warte Auf Spieler" oder "Team X hat nicht genug Spieler"
+    "Spielende" Button
+    Jeden Zug als Json String Speichern mit allen Informationen von der Position der Aufstellung bis zum wer das duell gewonnen hat
+    Daten in Datenbank sammeln
+    "Turnier" Textfeld optional im Header das beim späteren speichern mit in json kommt
+Search for Data:
+    "Team Area": Ergebnis: Jedes Spiel das man als Team gespielt hat mit den Ergebnissen der Züge aufklappbar
+        "Stats against [Teamname]": Liste von Stats: Duellwinrates, beste Aufstellung, gute paare, gute gegner
+    "Spieler Suche": Spielernamen setzen sich zur eindeutigkeit aus Team+Name zusammen. Dabei darf der Name im Team doppelt sein, dann muss aber ein Präfix beim Erstellen angehangen werden. Ergebnis: Jedes Spiel in dem man mitgespielt hat
+    "Turnier suche": Ergebnis: Alle Spiele eines Turniers.
+Tierlist:
+    To be done
+    Vielleicht sowas wie beste Duellwinrate nach Spielern top 5
+    top 5 Teams mit wins (prozentual?alle? schwierig da nicht alle ausgewertet werden)
