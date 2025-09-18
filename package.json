@@ -17,7 +17,7 @@
     "tools:build": "node scripts/tools-build.mjs",
     "tools:sync": "node scripts/tools-sync.mjs",
     "tools:prepare": "npm run tools:build && FORCE=1 npm run tools:sync",
-    "tools:update": "git submodule update --remote --merge --recursive",
+    "tools:update": "node scripts/tools-update.mjs",
     "tools:refresh": "npm run tools:update && npm run tools:prepare",
     "gh-pages:build": "node scripts/gh-pages-build.mjs"
   },
