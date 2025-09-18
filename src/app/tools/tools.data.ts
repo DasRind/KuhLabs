@@ -14,9 +14,9 @@ export const TOOLS: ToolDefinition[] = [
     description:
       'Erzeugt zufällige Aufstellungen für Jugger-Teams – perfekt für Training und Spaß.',
     // Lokale Einbindung: wird aus public/embeds/randomizer/index.html geladen
-    externalUrl: '/embeds/randomizer/index.html',
+    externalUrl: 'embeds/randomizer/index.html',
     tags: ['jugger', 'tools'],
-    icon: '/tools/randomizer/img/basics/randomizerLogo.png',
+    icon: 'tools/randomizer/img/basics/randomizerLogo.png',
   },
 ];
 

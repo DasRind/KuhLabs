@@ -19,6 +19,7 @@ export class ToolEmbedComponent implements AfterViewInit {
 
   tool?: ToolDefinition;
   safeUrl?: SafeResourceUrl;
+  externalHref?: string;
   fromTag?: string | null;
   // Removed page scroll lock to allow outer page scrolling normally
 
@@ -27,7 +28,9 @@ export class ToolEmbedComponent implements AfterViewInit {
     const t = getToolBySlug(slug);
     this.tool = t;
     if (t?.externalUrl) {
-      this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(t.externalUrl);
+      const prepared = this.location.prepareExternalUrl(t.externalUrl);
+      this.externalHref = prepared;
+      this.safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(prepared);
     }
     // Prefer navigation state to know where to go back to (browser only)
     if (isPlatformBrowser(this.pid)) {
