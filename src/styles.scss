@@ -69,7 +69,9 @@ $bp-xl: 1280px;
   --brand-center-offset: 140px; /* vertikaler Offset, damit Brand über den Buttons steht */
   --brand-center-x-offset: 0px; /* Feinkorrektur für absolute Zentrierung (falls optisch off) */
   /* Default linker Rand des zentrierten Containers + Padding, ohne JS-Messung */
-  --brand-container-left: calc((100vw - min(100vw, var(--container-max))) / 2 + 1rem);
+  --brand-container-left: calc(
+    (100vw - min(100vw, var(--container-max))) / 2 + 1rem
+  );
 
   /* Background accents (light) */
   --kl-bg-grad: linear-gradient(
@@ -685,6 +687,15 @@ kl-header {
 
 :root[data-theme="dark"] .wordmark__labs {
   -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.25);
+}
+
+html {
+  scrollbar-width: none; /* kein Balken */
+}
+
+/* Für WebKit (Chrome, Edge, Safari, Opera) */
+html::-webkit-scrollbar {
+  display: none; /* Scrollbar unsichtbar */
 }
 
 /* --------------------------------------------------------------------------
