@@ -2,7 +2,7 @@ import {
   bootstrapApplication,
   BootstrapContext,
 } from '@angular/platform-browser';
-import { provideServerRendering } from '@angular/ssr';
+import { provideServerRendering, withRoutes } from '@angular/ssr';
 import {
   AngularNodeAppEngine,
   createNodeRequestHandler,
@@ -14,6 +14,7 @@ import { join, extname } from 'node:path';
 import { existsSync } from 'node:fs';
 import { appConfig } from './app/app.config';
 import { App } from './app/app';
+import { SERVER_ROUTES } from './server.routes';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
@@ -122,7 +123,7 @@ export default function bootstrap(context: BootstrapContext) {
     App,
     {
       providers: [
-        provideServerRendering(),
+        provideServerRendering(withRoutes(SERVER_ROUTES)),
         ...appConfig.providers, // deine globalen Provider
       ],
     },
