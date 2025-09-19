@@ -17,7 +17,7 @@
     <meta property="og:title" content="KUH LABS">
     <meta property="og:description" content="Zentraler Hub für Tools, Demos und Projekte von Das Rind.">
     <meta property="og:image" content="assets/logo/kuh-labs-icon.svg">
-  <style>:root{--kl-brown-500:#a66a3f;--kl-cream-50:#faf3e0;--kl-text:#1e1b16;--kl-text-inv:#fff7eb;--kl-bg:#f7f2e9;--kl-bg-elev:#fff;--kl-radius:12px;--kl-shadow:0 6px 18px rgba(0, 0, 0, .12);--kl-shadow-sm:0 2px 8px rgba(0, 0, 0, .08);--kl-border:rgba(30, 27, 22, .12);--kl-link:#a66a3f;--kl-link-hover:rgb(146.08, 93.28, 55.44);--container-max:1200px;--brand-left:64px;--brand-top:14px;--brand-center-offset:140px;--brand-center-x-offset:0px;--brand-container-left:calc((100vw - min(100vw, var(--container-max)))/2 + 1rem) ;--kl-bg-grad:linear-gradient( 180deg, rgb(253.4, 252.4, 250.6) 0%, #f7f2e9 60%, rgb(237.12, 232.32, 223.68) 100% );--kl-bg-spot-1:radial-gradient( 1200px 700px at 20% 12%, rgba(166, 106, 63, .06), transparent 60% );--kl-bg-spot-2:radial-gradient( 800px 500px at 82% 28%, rgba(166, 106, 63, .05), transparent 65% )}*,*:before,*:after{box-sizing:border-box}html,body{padding:0;margin:0;scroll-behavior:smooth;background:var(--kl-bg-grad),var(--kl-bg-spot-1),var(--kl-bg-spot-2),var(--kl-bg);color:var(--kl-text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;position:relative}@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}html{scrollbar-width:none}</style><link rel="stylesheet" href="styles-OWKCRTLW.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="styles-OWKCRTLW.css"></noscript></head>
+  <style>:root{--kl-brown-500:#a66a3f;--kl-cream-50:#faf3e0;--kl-text:#1e1b16;--kl-text-inv:#fff7eb;--kl-bg:#f7f2e9;--kl-bg-elev:#fff;--kl-radius:12px;--kl-shadow:0 6px 18px rgba(0, 0, 0, .12);--kl-shadow-sm:0 2px 8px rgba(0, 0, 0, .08);--kl-border:rgba(30, 27, 22, .12);--kl-link:#a66a3f;--kl-link-hover:rgb(146.08, 93.28, 55.44);--container-max:1200px;--brand-left:64px;--brand-top:14px;--brand-center-offset:140px;--brand-center-x-offset:0px;--brand-container-left:calc((100vw - min(100vw, var(--container-max)))/2 + 1rem) ;--kl-bg-grad:linear-gradient( 180deg, rgb(253.4, 252.4, 250.6) 0%, #f7f2e9 60%, rgb(237.12, 232.32, 223.68) 100% );--kl-bg-spot-1:radial-gradient( 1200px 700px at 20% 12%, rgba(166, 106, 63, .06), transparent 60% );--kl-bg-spot-2:radial-gradient( 800px 500px at 82% 28%, rgba(166, 106, 63, .05), transparent 65% )}*,*:before,*:after{box-sizing:border-box}html,body{padding:0;margin:0;scroll-behavior:smooth;background:var(--kl-bg-grad),var(--kl-bg-spot-1),var(--kl-bg-spot-2),var(--kl-bg);color:var(--kl-text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;position:relative}@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}html{scrollbar-width:none}</style><link rel="stylesheet" href="styles-KMJC4N4L.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="styles-KMJC4N4L.css"></noscript></head>
   <body ngcm="">
     <script>
       (function initDoc() {
@@ -26,19 +26,22 @@
           // Temporarily disable transitions during first paint to avoid flashes
           doc.setAttribute("data-boot", "1");
           // Apply saved theme early to avoid flash
-          var saved = localStorage.getItem("theme");
-          var mode =
-            saved ||
-            (window.matchMedia &&
-            matchMedia("(prefers-color-scheme: dark)").matches
-              ? "dark"
-              : "light");
-          doc.setAttribute("data-theme", mode);
+      var saved = localStorage.getItem("theme");
+      var mode =
+        saved ||
+        (window.matchMedia &&
+        matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light");
+      doc.setAttribute("data-theme", mode);
+      doc.style.backgroundColor = mode === "dark" ? "#1f1711" : "#f7f2e9";
+      doc.style.colorScheme = mode === "dark" ? "dark" : "light";
           // Mark home route early to avoid header flicker on landing
-          if (
+          var isHome =
             location &&
-            (location.pathname === "/" || location.pathname === "")
-          ) {
+            (location.pathname === "/" || location.pathname === "");
+          doc.style.setProperty("--header-fade", isHome ? "0" : "1");
+          if (isHome) {
             doc.setAttribute("data-home", "1");
             // Initialize header fade based on current scroll to prevent flash
             var y = (window.scrollY || doc.scrollTop || 0);
