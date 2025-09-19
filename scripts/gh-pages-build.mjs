@@ -30,6 +30,10 @@ const deriveBaseHref = () => {
   if (override) {
     return normalizeBaseHref(override);
   }
+  const cname = readCustomDomain();
+  if (cname) {
+    return '/';
+  }
 
   try {
     const remote = spawnSync('git', ['remote', 'get-url', '--push', 'origin'], {
@@ -117,6 +121,11 @@ copyRecursive(browserDir, docsDir);
 const noJekyll = path.join(docsDir, '.nojekyll');
 fs.writeFileSync(noJekyll, '');
 
+const cnameValue = readCustomDomain();
+if (cnameValue) {
+  fs.writeFileSync(path.join(docsDir, 'CNAME'), `${cnameValue}\n`, 'utf8');
+}
+
 const indexHtml = path.join(docsDir, 'index.html');
 const fallbackHtml = path.join(docsDir, '404.html');
 if (fs.existsSync(indexHtml)) {
@@ -139,4 +148,22 @@ function copyRecursive(src, dest) {
     fs.copyFileSync(src, dest);
     return;
   }
+}
+
+function readCustomDomain() {
+  const cnameCandidates = [
+    path.resolve(repoRoot, 'CNAME'),
+    path.resolve(docsDir, 'CNAME'),
+  ];
+  for (const file of cnameCandidates) {
+    try {
+      if (fs.existsSync(file)) {
+        const content = fs.readFileSync(file, 'utf8').trim();
+        if (content) {
+          return content;
+        }
+      }
+    } catch {}
+  }
+  return '';
 }
