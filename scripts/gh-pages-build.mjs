@@ -132,6 +132,8 @@ if (fs.existsSync(indexHtml)) {
   fs.copyFileSync(indexHtml, fallbackHtml);
 }
 
+ensureRouteFallbacks(indexHtml);
+
 console.log('[#gh-pages] Fertig! Committe & pushe `docs/` nach main, um GitHub Pages zu aktualisieren.');
 
 function copyRecursive(src, dest) {
@@ -166,4 +168,36 @@ function readCustomDomain() {
     } catch {}
   }
   return '';
+}
+
+function ensureRouteFallbacks(indexHtmlPath) {
+  if (!fs.existsSync(indexHtmlPath)) return;
+  const toolDataPath = path.resolve(repoRoot, 'src/app/tools/tools.data.ts');
+  let slugs = [];
+  try {
+    const source = fs.readFileSync(toolDataPath, 'utf8');
+    const regex = /slug:\s*'([^']+)'/g;
+    const found = new Set();
+    let match;
+    while ((match = regex.exec(source))) {
+      found.add(match[1]);
+    }
+    slugs = Array.from(found);
+  } catch (error) {
+    console.warn(`[#gh-pages] Konnte Tool-Slugs nicht auslesen (${error.message}).`);
+    return;
+  }
+  if (!slugs.length) return;
+
+  const indexContent = fs.readFileSync(indexHtmlPath);
+  for (const slug of slugs) {
+    const outDir = path.join(docsDir, 'tools', slug);
+    const outFile = path.join(outDir, 'index.html');
+    try {
+      fs.mkdirSync(outDir, { recursive: true });
+      fs.writeFileSync(outFile, indexContent);
+    } catch (error) {
+      console.warn(`[#gh-pages] Fallback für /tools/${slug} konnte nicht erstellt werden (${error.message}).`);
+    }
+  }
 }

@@ -30,8 +30,50 @@
 
     @if (safeUrl) {
       <div class="frame-wrap">
-        <iframe #frame [src]="safeUrl" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin"></iframe>
+        <iframe
+          #frame
+          [src]="safeUrl"
+          [attr.title]="v.title ? v.title + ' – Vorschau' : 'Tool Vorschau'"
+          referrerpolicy="no-referrer"
+          sandbox="allow-scripts allow-same-origin"
+        ></iframe>
       </div>
+      <section class="commit-panel" aria-labelledby="commitTitle">
+        <div class="commit-panel__header">
+          <h3 id="commitTitle">Letzte Commits</h3>
+          @if (v.repoUrl) {
+            <a class="btn btn--ghost" [href]="v.repoUrl" target="_blank" rel="noopener" title="Zum Repository">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M18 13v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <polyline points="15 3 21 3 21 9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>
+              <span class="btn__label">Repository</span>
+            </a>
+          }
+        </div>
+        @if (v.lastCommits?.length) {
+          <ul class="commit-list">
+            @for (entry of v.lastCommits; track entry.hash) {
+              <li class="commit-item">
+                <div class="commit-item__meta">
+                  <span class="commit-date">{{ entry.date }}</span>
+                </div>
+                <p class="commit-message">{{ entry.message }}</p>
+                @if (entry.url) {
+                  <a class="commit-link" [href]="entry.url" target="_blank" rel="noopener" title="Commit anzeigen">
+                    Details ansehen
+                  </a>
+                }
+              </li>
+            }
+          </ul>
+        } @else {
+          <div class="commit-empty">
+            <p>Noch keine Commits hinterlegt. Schau später wieder rein!</p>
+          </div>
+        }
+      </section>
     } @else {
       <div class="alert alert--warn">
         Für dieses Tool ist noch keine URL hinterlegt. Bitte in

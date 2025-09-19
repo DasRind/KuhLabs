@@ -1,3 +1,6 @@
+import { TOOL_COMMITS } from './tool-commits';
+import type { ToolCommit } from './tool-commit.types';
+
 export type ToolDefinition = {
   slug: string;
   title: string;
@@ -5,6 +8,8 @@ export type ToolDefinition = {
   externalUrl?: string; // URL to load in iframe
   icon?: string; // optional icon path under /assets
   tags?: string[]; // categorization: e.g., ['jugger', 'tools']
+  repoUrl?: string; // optional repository link
+  lastCommits?: ToolCommit[]; // optional recent commit info
 };
 
 export const TOOLS: ToolDefinition[] = [
@@ -17,6 +22,8 @@ export const TOOLS: ToolDefinition[] = [
     externalUrl: 'embeds/randomizer/index.html',
     tags: ['jugger', 'tools'],
     icon: 'tools/randomizer/img/basics/randomizerLogo.png',
+    repoUrl: 'https://github.com/DasRind/KuhLabs',
+    lastCommits: TOOL_COMMITS['randomizer'] ?? [],
   },
 ];
 

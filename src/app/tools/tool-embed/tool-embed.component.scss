@@ -17,6 +17,83 @@ iframe {
   background: var(--kl-bg-elev);
 }
 
+.commit-panel {
+  margin-top: 2.5rem;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border: 1px solid color-mix(in srgb, var(--kl-border), transparent 35%);
+  border-radius: calc(var(--kl-radius) * 1.15);
+  background: color-mix(in srgb, var(--kl-bg-elev), transparent 25%);
+  box-shadow: var(--kl-shadow-sm);
+}
+
+.commit-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.commit-panel__header .btn__label {
+  margin-left: 0.4rem;
+}
+
+.commit-list {
+  display: grid;
+  gap: 1.1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.commit-item {
+  padding: 1rem 1.1rem;
+  border-radius: calc(var(--kl-radius) * 0.9);
+  border: 1px solid color-mix(in srgb, var(--kl-border), transparent 45%);
+  background: color-mix(in srgb, var(--kl-bg), transparent 15%);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+}
+
+.commit-item__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: color-mix(in srgb, var(--kl-text), transparent 25%);
+}
+
+.commit-message {
+  margin: 0.65rem 0 0.5rem;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.commit-link {
+  font-size: 0.9rem;
+  color: color-mix(in srgb, var(--kl-text), transparent 10%);
+  text-decoration: underline;
+}
+
+.commit-empty {
+  padding: 1rem 1.2rem;
+  border-radius: calc(var(--kl-radius) * 0.9);
+  background: color-mix(in srgb, var(--kl-bg), transparent 12%);
+  color: color-mix(in srgb, var(--kl-text), transparent 20%);
+  border: 1px dashed color-mix(in srgb, var(--kl-border), transparent 50%);
+  font-size: 0.95rem;
+}
+
+@media (max-width: 720px) {
+  .commit-panel__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .commit-item {
+    padding: 0.85rem 0.95rem;
+  }
+}
+
 .tool-bar {
   display: flex;
   align-items: center;

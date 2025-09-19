@@ -1,1 +1,0 @@
-var i=[{slug:"randomizer",title:"Jugger Randomized Lineup Generator",description:"Erzeugt zuf\xE4llige Aufstellungen f\xFCr Jugger-Teams \u2013 perfekt f\xFCr Training und Spa\xDF.",externalUrl:"embeds/randomizer/index.html",tags:["jugger","tools"],icon:"tools/randomizer/img/basics/randomizerLogo.png"}];function r(e){return i.find(n=>n.slug===e)}export{i as a,r as b};
