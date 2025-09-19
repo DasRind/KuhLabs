@@ -510,6 +510,9 @@ select:focus {
 :root[data-boot="1"] .brand-slot {
   transition: none !important;
 }
+:root[data-home="1"] {
+  --header-fade: 0;
+}
 .navbar__border {
   position: absolute;
   left: 0;

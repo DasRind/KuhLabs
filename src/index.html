@@ -44,19 +44,22 @@
           // Temporarily disable transitions during first paint to avoid flashes
           doc.setAttribute("data-boot", "1");
           // Apply saved theme early to avoid flash
-          var saved = localStorage.getItem("theme");
-          var mode =
-            saved ||
-            (window.matchMedia &&
-            matchMedia("(prefers-color-scheme: dark)").matches
-              ? "dark"
-              : "light");
-          doc.setAttribute("data-theme", mode);
+      var saved = localStorage.getItem("theme");
+      var mode =
+        saved ||
+        (window.matchMedia &&
+        matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light");
+      doc.setAttribute("data-theme", mode);
+      doc.style.backgroundColor = mode === "dark" ? "#1f1711" : "#f7f2e9";
+      doc.style.colorScheme = mode === "dark" ? "dark" : "light";
           // Mark home route early to avoid header flicker on landing
-          if (
+          var isHome =
             location &&
-            (location.pathname === "/" || location.pathname === "")
-          ) {
+            (location.pathname === "/" || location.pathname === "");
+          doc.style.setProperty("--header-fade", isHome ? "0" : "1");
+          if (isHome) {
             doc.setAttribute("data-home", "1");
             // Initialize header fade based on current scroll to prevent flash
             var y = (window.scrollY || doc.scrollTop || 0);
