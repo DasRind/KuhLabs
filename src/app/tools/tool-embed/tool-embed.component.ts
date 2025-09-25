@@ -1,4 +1,13 @@
-import { Component, inject, AfterViewInit, ElementRef, ViewChild, NgZone, Inject, PLATFORM_ID } from '@angular/core';
+import {
+  Component,
+  inject,
+  AfterViewInit,
+  ElementRef,
+  ViewChild,
+  NgZone,
+  Inject,
+  PLATFORM_ID,
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { getToolBySlug, ToolDefinition } from '../tools.data';
@@ -21,7 +30,6 @@ export class ToolEmbedComponent implements AfterViewInit {
   safeUrl?: SafeResourceUrl;
   externalHref?: string;
   fromTag?: string | null;
-  // Removed page scroll lock to allow outer page scrolling normally
 
   constructor(@Inject(PLATFORM_ID) private pid: Object) {
     const slug = this.route.snapshot.paramMap.get('slug') ?? '';
@@ -35,8 +43,12 @@ export class ToolEmbedComponent implements AfterViewInit {
     // Prefer navigation state to know where to go back to (browser only)
     if (isPlatformBrowser(this.pid)) {
       const nav = this.router.getCurrentNavigation();
-      const hs: any = (typeof history !== 'undefined' && (history as any).state) ? (history as any).state : null;
-      this.fromTag = (nav?.extras?.state as any)?.fromTag ?? (hs && hs.fromTag) ?? null;
+      const hs: any =
+        typeof history !== 'undefined' && (history as any).state
+          ? (history as any).state
+          : null;
+      this.fromTag =
+        (nav?.extras?.state as any)?.fromTag ?? (hs && hs.fromTag) ?? null;
     } else {
       this.fromTag = null;
     }
@@ -48,7 +60,14 @@ export class ToolEmbedComponent implements AfterViewInit {
   back() {
     const target = (this.fromTag || this.pickBestTag(this.tool))?.toLowerCase();
     if (target) {
-      const path = target === 'tools' ? '/tools' : target === 'jugger' ? '/jugger' : target === 'games' ? '/games' : '/tools';
+      const path =
+        target === 'tools'
+          ? '/tools'
+          : target === 'jugger'
+          ? '/jugger'
+          : target === 'games'
+          ? '/games'
+          : '/tools';
       this.router.navigateByUrl(path);
     } else {
       // Fallback: go to generic tools overview
@@ -65,7 +84,8 @@ export class ToolEmbedComponent implements AfterViewInit {
     return tags[0];
   }
 
-  @ViewChild('frame', { static: false }) frameRef?: ElementRef<HTMLIFrameElement>;
+  @ViewChild('frame', { static: false })
+  frameRef?: ElementRef<HTMLIFrameElement>;
   private zone = inject(NgZone);
   ngAfterViewInit(): void {
     // When iframe loads, inject guards to prevent scroll from bubbling to outer page at edges
@@ -77,10 +97,12 @@ export class ToolEmbedComponent implements AfterViewInit {
           const doc = iframe.contentDocument || iframe.contentWindow?.document;
           if (!doc) return;
           // Apply overscroll behavior inside the iframe as well
-          (doc.documentElement as HTMLElement).style.overscrollBehavior = 'contain';
+          (doc.documentElement as HTMLElement).style.overscrollBehavior =
+            'contain';
           (doc.body as HTMLElement).style.overscrollBehavior = 'contain';
 
-          const scrollEl = (doc.scrollingElement || doc.documentElement) as HTMLElement;
+          const scrollEl = (doc.scrollingElement ||
+            doc.documentElement) as HTMLElement;
           const guardWheel = (ev: WheelEvent) => {
             const { scrollTop, scrollHeight, clientHeight } = scrollEl;
             const atTop = scrollTop <= 0;
