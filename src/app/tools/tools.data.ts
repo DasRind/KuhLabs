@@ -1,4 +1,4 @@
-import { TOOL_COMMITS } from './tool-commits';
+﻿import { TOOL_COMMITS } from './tool-commits';
 import type { ToolCommit } from './tool-commit.types';
 
 export type ToolDefinition = {
@@ -21,7 +21,7 @@ export const TOOLS: ToolDefinition[] = [
     // Lokale Einbindung: wird aus public/embeds/randomizer/index.html geladen
     externalUrl: 'embeds/randomizer/index.html',
     tags: ['jugger', 'tools'],
-    icon: 'tools/randomizer/img/basics/randomizerLogo.png',
+    icon: 'embeds/randomizer/img/basics/randomizerLogo.png',
     repoUrl: 'https://github.com/DasRind/KuhLabs',
     lastCommits: TOOL_COMMITS['randomizer'] ?? [],
   },
@@ -30,3 +30,6 @@ export const TOOLS: ToolDefinition[] = [
 export function getToolBySlug(slug: string): ToolDefinition | undefined {
   return TOOLS.find((t) => t.slug === slug);
 }
+
+
+

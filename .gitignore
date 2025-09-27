@@ -38,10 +38,15 @@ testem.log
 /typings
 
 # External tool bundles and cloned projects
-/external/
+/external/*
 /public/embeds/
 /public/tools/
 
 # System files
 .DS_Store
 Thumbs.db
+
+
+# Allow tracked tool submodules
+!/external/tools/
+!/external/tools/**

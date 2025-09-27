@@ -1,28 +1,30 @@
-#!/usr/bin/env node
+﻿#!/usr/bin/env node
 /**
  * tools-sync.mjs
  *
  * Zweck
  *  - Kopiert fertig gebaute, statische Dateien aus Submodules unter `external/`
- *    in das öffentliche Verzeichnis `public/embeds/<slug>`.
- *  - Diese Dateien werden anschließend per iframe im App‑Route `/tools/:slug` geladen.
+ *    in das Ã¶ffentliche Verzeichnis `public/embeds/<slug>`.
+ *  - Diese Dateien werden anschlieÃŸend per iframe im Appâ€‘Route `/tools/:slug` geladen.
  *
  * Warum .mjs?
- *  - .mjs aktiviert in Node.js das ESM‑Modulformat (import/export),
+ *  - .mjs aktiviert in Node.js das ESMâ€‘Modulformat (import/export),
  *    ohne dass das Hauptprojekt `"type": "module"` setzt.
  *
- * Sicherheits-/Stabilitäts‑Aspekte
- *  - Nur Build‑Ordner werden akzeptiert (`docs`, `dist`, `build`).
+ * Sicherheits-/StabilitÃ¤tsâ€‘Aspekte
+ *  - Nur Buildâ€‘Ordner werden akzeptiert (`docs`, `dist`, `build`).
  *  - Es wird nach einer `index.html` gesucht (bis Tiefe 2),
- *    damit z. B. Angular‑Builds (`dist/<name>/browser/`) gefunden werden.
- *  - Einfache Heuristik filtert Dev‑Indizes (Vite/Webpack/HMR/localhost),
- *    um Reload‑Loops zu verhindern.
- *  - Inkrementell: Kopiert nur bei geändertem Submodule‑Commit. Erzwingen mit `FORCE=1`.
+ *    damit z. B. Angularâ€‘Builds (`dist/<name>/browser/`) gefunden werden.
+ *  - Einfache Heuristik filtert Devâ€‘Indizes (Vite/Webpack/HMR/localhost),
+ *    um Reloadâ€‘Loops zu verhindern.
+ *  - Inkrementell: Kopiert nur bei geÃ¤ndertem Submoduleâ€‘Commit. Erzwingen mit `FORCE=1`.
  */
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
+
+const cliArgs = new Set(process.argv.slice(2));
 
 // Konfiguration der Tools, die synchronisiert werden
 const tools = [
@@ -35,7 +37,7 @@ const tools = [
   },
 ];
 
-// Rekursive Kopie mit kleinen Ausschlüssen (VCS/CI/node_modules)
+// Rekursive Kopie mit kleinen AusschlÃ¼ssen (VCS/CI/node_modules)
 const copyRecursive = (src, dest) => {
   const stat = fs.statSync(src);
   if (stat.isDirectory()) {
@@ -51,7 +53,7 @@ const copyRecursive = (src, dest) => {
   }
 };
 
-// Ablage für den zuletzt synchronisierten Commit je Tool
+// Ablage fÃ¼r den zuletzt synchronisierten Commit je Tool
 const stateDir = path.resolve('.tools-sync');
 fs.mkdirSync(stateDir, { recursive: true });
 
@@ -59,19 +61,19 @@ let changed = false;
 for (const t of tools) {
   const base = path.resolve(t.srcRoot);
   if (!fs.existsSync(base)) {
-    console.warn(`[tools-sync] Quelle fehlt: ${t.slug} (${t.srcRoot}) — Submodule noch nicht ausgecheckt?`);
+    console.warn(`[tools-sync] Quelle fehlt: ${t.slug} (${t.srcRoot}) â€” Submodule noch nicht ausgecheckt?`);
     continue;
   }
 
-  // Inkrementell: vergleiche Submodule‑HEAD mit zuletzt synchronisiertem Stand
+  // Inkrementell: vergleiche Submoduleâ€‘HEAD mit zuletzt synchronisiertem Stand
   const rev = spawnSync('git', ['-C', base, 'rev-parse', 'HEAD'], { encoding: 'utf8' });
   const head = rev.status === 0 ? String(rev.stdout).trim() : 'unknown';
   const revFile = path.join(stateDir, `${t.slug}.rev`);
   const last = fs.existsSync(revFile) ? fs.readFileSync(revFile, 'utf8').trim() : '';
   const dest = path.resolve(t.destRoot);
-  const force = process.env.FORCE === '1' || process.env.FORCE === 'true';
+  const force = process.env.FORCE === '1' || process.env.FORCE === 'true' || cliArgs.has('--force');
   if (!force && head && last === head && fs.existsSync(dest)) {
-    console.log(`[tools-sync] ${t.slug}: unverändert (${head.slice(0,7)}). Überspringe Kopie.`);
+    console.log(`[tools-sync] ${t.slug}: unverÃ¤ndert (${head.slice(0,7)}). Ãœberspringe Kopie.`);
     continue;
   }
   let sourceDir = undefined;
@@ -100,12 +102,12 @@ for (const t of tools) {
       };
       tryDepth(p, 0);
       if (!candidateDir) continue;
-      // Sanity: Dev‑Indizes überspringen (vite/webpack/localhost/hmr)
+      // Sanity: Devâ€‘Indizes Ã¼berspringen (vite/webpack/localhost/hmr)
       try {
         const ix = fs.readFileSync(path.join(candidateDir, 'index.html'), 'utf8');
         const devHints = /(vite\.|webpack|localhost:|ng\s+serve|hmr)/i.test(ix);
         if (devHints) {
-          console.warn(`[tools-sync] ${t.slug}: '${path.relative(base, candidateDir)}/index.html' sieht nach Dev aus – überspringe.`);
+          console.warn(`[tools-sync] ${t.slug}: '${path.relative(base, candidateDir)}/index.html' sieht nach Dev aus â€“ Ã¼berspringe.`);
           continue;
         }
       } catch {}
@@ -114,10 +116,10 @@ for (const t of tools) {
     }
   }
   if (!sourceDir) {
-    console.warn(`[tools-sync] Kein geeigneter Build-Ordner gefunden für ${t.slug}. Erwartet eine der ${t.candidates.join(', ')} mit index.html (kein Dev-Index).`);
+    console.warn(`[tools-sync] Kein geeigneter Build-Ordner gefunden fÃ¼r ${t.slug}. Erwartet eine der ${t.candidates.join(', ')} mit index.html (kein Dev-Index).`);
     continue;
   }
-  console.log(`[tools-sync] Kopiere ${sourceDir} → ${dest}`);
+  console.log(`[tools-sync] Kopiere ${sourceDir} â†’ ${dest}`);
   fs.rmSync(dest, { recursive: true, force: true });
   copyRecursive(sourceDir, dest);
   changed = true;
@@ -130,3 +132,4 @@ for (const t of tools) {
 if (!changed) {
   console.log('[tools-sync] Nichts zu kopieren.');
 }
+

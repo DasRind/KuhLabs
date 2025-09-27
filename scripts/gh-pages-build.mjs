@@ -2,9 +2,9 @@
 /**
  * gh-pages-build.mjs
  *
- * Baut das Angular-Projekt für GitHub Pages.
+ * Baut das Angular-Projekt fÃ¼r GitHub Pages.
  * - Ermittelt ein sinnvolles baseHref (Repo-Name oder GH_PAGES_BASE_HREF).
- * - Führt `ng build` im Produktionsmodus aus.
+ * - FÃ¼hrt `ng build` im Produktionsmodus aus.
  * - Kopiert das Browser-Build nach `docs/` und legt `.nojekyll` + `404.html` an.
  */
 
@@ -15,8 +15,9 @@ import { spawnSync } from 'node:child_process';
 const MIN_NODE_MAJOR = 20;
 const nodeVersion = process.versions.node;
 const nodeMajor = Number(nodeVersion.split('.')[0]);
+const isWin = process.platform === 'win32';
 if (!Number.isFinite(nodeMajor) || nodeMajor < MIN_NODE_MAJOR) {
-  console.error(`[#gh-pages] Benötige Node.js >= ${MIN_NODE_MAJOR}. Aktuell: ${nodeVersion}.`);
+  console.error(`[#gh-pages] BenÃ¶tige Node.js >= ${MIN_NODE_MAJOR}. Aktuell: ${nodeVersion}.`);
   process.exit(1);
 }
 
@@ -90,8 +91,8 @@ const extractRepoName = (remoteUrl) => {
 const baseHref = deriveBaseHref();
 console.log(`[#gh-pages] Verwende baseHref='${baseHref}'`);
 
-const npxBin = process.platform === 'win32' ? 'npx.cmd' : 'npx';
-console.log('[#gh-pages] Starte Angular-Build …');
+const npxBin = isWin ? 'npx.cmd' : 'npx';
+console.log('[#gh-pages] Starte Angular-Build ...');
 const build = spawnSync(npxBin, [
   'ng',
   'build',
@@ -102,13 +103,18 @@ const build = spawnSync(npxBin, [
 ], {
   cwd: repoRoot,
   stdio: 'inherit',
+  shell: isWin,
 });
+
+if (build.error) {
+  console.error(`[#gh-pages] Build fehlgeschlagen (${build.error.message}).`);
+  process.exit(build.status ?? 1);
+}
 
 if (build.status !== 0) {
   console.error(`[#gh-pages] Build fehlgeschlagen (Exit ${build.status ?? 'unknown'}).`);
   process.exit(build.status ?? 1);
 }
-
 if (!fs.existsSync(browserDir)) {
   console.error(`[#gh-pages] Erwarteter Browser-Ordner fehlt: ${path.relative(repoRoot, browserDir)}`);
   process.exit(1);
@@ -197,7 +203,8 @@ function ensureRouteFallbacks(indexHtmlPath) {
       fs.mkdirSync(outDir, { recursive: true });
       fs.writeFileSync(outFile, indexContent);
     } catch (error) {
-      console.warn(`[#gh-pages] Fallback für /tools/${slug} konnte nicht erstellt werden (${error.message}).`);
+      console.warn(`[#gh-pages] Fallback fÃ¼r /tools/${slug} konnte nicht erstellt werden (${error.message}).`);
     }
   }
 }
+
