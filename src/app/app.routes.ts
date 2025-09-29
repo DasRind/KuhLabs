@@ -35,4 +35,16 @@ export const routes: Routes = [
     loadComponent: () => import('./tools/tools-list/tools-list.component').then(m => m.ToolsListComponent),
     data: { tag: 'games', pageTitle: 'Games' },
   },
+  {
+    path: 'impressum',
+    loadComponent: () =>
+      import('./legal/impressum/impressum').then(m => m.ImpressumPage),
+    data: { pageTitle: 'Impressum' },
+  },
+  {
+    path: 'datenschutz',
+    loadComponent: () =>
+      import('./legal/datenschutz/datenschutz').then(m => m.DatenschutzPage),
+    data: { pageTitle: 'Datenschutz' },
+  },
 ];
