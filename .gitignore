@@ -39,11 +39,14 @@ testem.log
 
 # External tool bundles and cloned projects
 /external/*
-!/external/tools/
-!/external/tools/*
 /public/embeds/
 /public/tools/
 
 # System files
 .DS_Store
 Thumbs.db
+
+
+# Allow tracked tool submodules
+!/external/tools/
+!/external/tools/**

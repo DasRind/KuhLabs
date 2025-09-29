@@ -1,83 +1,90 @@
-#!/usr/bin/env node
+﻿#!/usr/bin/env node
 /**
  * tools-build.mjs
  *
- * Zweck
- *  - Baut externe Tool-Repos, die als Git-Submodule im Ordner `external/` liegen.
- *  - Ziel: Ein statischer Build (z. B. in `dist/`, `build/` oder `docs/`),
- *    den `tools-sync.mjs` anschließend in das öffentliche Verzeichnis kopiert.
+ * Purpose
+ *  - Builds external tool repositories that live as Git submodules under `external/`.
+ *  - Goal: produce a static build output (dist/build/docs) so tools-sync.mjs can copy it into public embeds.
  *
- * Warum .mjs?
- *  - .mjs aktiviert in Node.js standardmäßig das ESM‑Modulformat (import/export),
- *    ohne dass das Hauptprojekt `"type": "module"` setzen muss.
+ * Why .mjs?
+ *  - .mjs enables ESM syntax (import/export) in Node.js without forcing the main project to set `"type": "module"`.
  *
- * Funktionsweise
- *  - Für jedes Tool wird geprüft, ob ein `package.json` mit `scripts.build` existiert.
- *  - Wenn ja: optional `npm ci` (falls keine node_modules vorhanden), dann `npm run build`.
- *  - Wenn nein: es wird nichts gebaut (reine HTML/Static‑Repos sind ok).
+ * How it works
+ *  - For each tool we check for package.json with scripts.build.
+ *  - If present: optionally run npm ci (only if node_modules is missing) and then npm run build.
+ *  - Otherwise we skip (static HTML repos are allowed).
  */
 
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 
-// Liste der Tools, die gebaut werden sollen.
-// - slug: kurzer Bezeichner
-// - cwd: Pfad zum Submodule
-// - build: optionaler Custom‑Build‑Befehl; wenn undefiniert, wird auto‑detektiert
+const isWin = process.platform === 'win32';
+const npmCmd = isWin ? 'npm.cmd' : 'npm';
+
+// Tools to build
+// - slug: short identifier
+// - cwd: path to the submodule
+// - build: optional custom build command; auto-detect when undefined
 const tools = [
   {
     slug: 'randomizer',
     cwd: 'external/tools/randomizer',
-    // If undefined, auto-detect: run `npm ci` (when node_modules missing) then `npm run build` if available
+    // Auto mode: run npm ci (if needed) and npm run build
     build: undefined,
   },
 ];
 
-// Kleiner Helfer zum Ausführen von Kommandos mit Fehlerabbruch
-const run = (cmd, args, opts) => {
-  const r = spawnSync(cmd, args, { stdio: 'inherit', ...opts });
+// Run helper that aborts on non-zero exit codes
+const run = (cmd, args, opts = {}) => {
+  const spawnOpts = { stdio: 'inherit', ...opts };
+  if (isWin && spawnOpts.shell === undefined) {
+    spawnOpts.shell = true;
+  }
+  const r = spawnSync(cmd, args, spawnOpts);
   if (r.status !== 0) throw new Error(`${cmd} ${args.join(' ')} failed`);
 };
 
 for (const t of tools) {
   const repoDir = path.resolve(t.cwd);
   if (!fs.existsSync(repoDir)) {
-    console.warn(`[tools-build] Quelle fehlt: ${t.slug} (${t.cwd}). Überspringe.`);
+    console.warn(`[tools-build] Missing source: ${t.slug} (${t.cwd}). Skipping.`);
     continue;
   }
 
   if (t.build) {
-    console.log(`[tools-build] ${t.slug}: custom build → ${t.build}`);
-    run('bash', ['-lc', t.build], { cwd: repoDir });
+    console.log(`[tools-build] ${t.slug}: custom build -> ${t.build}`);
+    if (isWin) {
+      run('powershell.exe', ['-NoProfile', '-Command', t.build], { cwd: repoDir, shell: false });
+    } else {
+      run('bash', ['-lc', t.build], { cwd: repoDir, shell: false });
+    }
     continue;
   }
 
-  // Auto‑Erkennung: package.json vorhanden?
   const pkgPath = path.join(repoDir, 'package.json');
   if (!fs.existsSync(pkgPath)) {
-    console.log(`[tools-build] ${t.slug}: kein package.json gefunden – überspringe Build (evtl. reine HTML-App).`);
+    console.log(`[tools-build] ${t.slug}: no package.json found -> skipping build (probably static).`);
     continue;
   }
   const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
   const hasBuild = pkg.scripts && pkg.scripts.build;
 
   if (!hasBuild) {
-    console.log(`[tools-build] ${t.slug}: kein build-Script – überspringe Build.`);
+    console.log(`[tools-build] ${t.slug}: no build script -> skipping.`);
     continue;
   }
 
-  // Dependencies nur installieren, wenn node_modules fehlt (schneller bei wiederholtem Build)
   const nm = path.join(repoDir, 'node_modules');
   if (!fs.existsSync(nm)) {
     console.log(`[tools-build] ${t.slug}: npm ci`);
-    run('npm', ['ci'], { cwd: repoDir });
+    run(npmCmd, ['ci'], { cwd: repoDir });
   } else {
-    console.log(`[tools-build] ${t.slug}: node_modules vorhanden – Installation übersprungen.`);
+    console.log(`[tools-build] ${t.slug}: node_modules present -> skipping install.`);
   }
 
   console.log(`[tools-build] ${t.slug}: npm run build`);
-  run('npm', ['run', 'build'], { cwd: repoDir });
+  run(npmCmd, ['run', 'build'], { cwd: repoDir });
 }
 
-console.log('[tools-build] Fertig.');
+console.log('[tools-build] Done.');

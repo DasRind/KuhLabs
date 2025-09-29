@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "kuh-labs",
   "version": "0.0.0",
   "scripts": {
@@ -17,7 +17,7 @@
     "tools:build": "node scripts/tools-build.mjs",
     "tools:sync": "node scripts/tools-sync.mjs",
     "tools:commits": "node scripts/tools-commits.mjs",
-    "tools:prepare": "npm run tools:build && FORCE=1 npm run tools:sync && npm run tools:commits",
+    "tools:prepare": "npm run tools:build && node scripts/tools-sync.mjs --force && npm run tools:commits",
     "tools:update": "node scripts/tools-update.mjs",
     "tools:refresh": "npm run tools:update && npm run tools:prepare",
     "gh-pages:build": "node scripts/gh-pages-build.mjs"
@@ -62,3 +62,4 @@
     "typescript": "~5.8.2"
   }
 }
+
