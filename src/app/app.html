@@ -5,6 +5,12 @@
   <router-outlet></router-outlet>
 </main>
 
-<footer class="footer container">
-  <small>© KUH LABS – Das Rind</small>
+<footer class="footer">
+  <div class="footer__inner container">
+    <small>© KUH LABS – Das Rind</small>
+    <nav class="footer__links" aria-label="Rechtliches">
+      <a routerLink="/impressum" routerLinkActive="is-active">Impressum</a>
+      <a routerLink="/datenschutz" routerLinkActive="is-active">Datenschutz</a>
+    </nav>
+  </div>
 </footer>
