@@ -38,7 +38,9 @@ testem.log
 /typings
 
 # External tool bundles and cloned projects
-/external/
+/external/*
+!/external/tools/
+!/external/tools/*
 /public/embeds/
 /public/tools/
 
