@@ -21,11 +21,7 @@ export const TOOLS: ToolDefinition[] = [
     // Lokale Einbindung: wird aus public/embeds/randomizer/index.html geladen
     externalUrl: 'embeds/randomizer/index.html',
     tags: ['jugger', 'tools'],
-<<<<<<< HEAD
     icon: 'assets/tools/randomizer/randomizerLogo.png',
-=======
-    icon: 'embeds/randomizer/img/basics/randomizerLogo.png',
->>>>>>> 8e37c9477a790c0e8b31acaab5f266b7dfefb721
     repoUrl: 'https://github.com/DasRind/KuhLabs',
     lastCommits: TOOL_COMMITS['randomizer'] ?? [],
   },
