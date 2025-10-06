@@ -16,9 +16,9 @@ const repoRoot = process.cwd();
 const tools = [
   {
     slug: 'randomizer',
-    repoUrl: 'https://github.com/DasRind/KuhLabs',
-    gitCwd: '.',
-    commitPaths: ['external/tools/randomizer'],
+    repoUrl: 'https://github.com/DasRind/juggertools',
+    gitCwd: 'external/tools/randomizer',
+    commitPaths: ['lineup-randomizer'],
     limit: 3,
   },
 ];

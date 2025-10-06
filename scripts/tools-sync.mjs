@@ -31,8 +31,16 @@ const tools = [
   {
     slug: 'randomizer',
     srcRoot: 'external/tools/randomizer',
+    gitDir: 'external/tools/randomizer',
     // Only accept built outputs to avoid dev-index reload loops
-    candidates: ['docs', 'dist', 'build'],
+    candidates: [
+      'dist/lineup-randomizer/browser',
+      'dist/randomizerJuggerLineup/browser',
+      'dist/randomizer/browser',
+      'dist/browser',
+      'docs',
+      'build',
+    ],
     destRoot: 'public/embeds/randomizer',
   },
 ];
@@ -61,12 +69,13 @@ let changed = false;
 for (const t of tools) {
   const base = path.resolve(t.srcRoot);
   if (!fs.existsSync(base)) {
-    console.warn(`[tools-sync] Quelle fehlt: ${t.slug} (${t.srcRoot}) â€” Submodule noch nicht ausgecheckt?`);
+    console.warn(`[tools-sync] Quelle fehlt: ${t.slug} (${t.srcRoot}) â€” bitte zuerst bauen.`);
     continue;
   }
 
-  // Inkrementell: vergleiche Submoduleâ€‘HEAD mit zuletzt synchronisiertem Stand
-  const rev = spawnSync('git', ['-C', base, 'rev-parse', 'HEAD'], { encoding: 'utf8' });
+  // Inkrementell: vergleiche Submoduleâ€‘ (bzw. Repo-) HEAD mit zuletzt synchronisiertem Stand
+  const gitBase = path.resolve(t.gitDir ?? t.srcRoot);
+  const rev = spawnSync('git', ['-C', gitBase, 'rev-parse', 'HEAD'], { encoding: 'utf8' });
   const head = rev.status === 0 ? String(rev.stdout).trim() : 'unknown';
   const revFile = path.join(stateDir, `${t.slug}.rev`);
   const last = fs.existsSync(revFile) ? fs.readFileSync(revFile, 'utf8').trim() : '';
@@ -132,4 +141,3 @@ for (const t of tools) {
 if (!changed) {
   console.log('[tools-sync] Nichts zu kopieren.');
 }
-

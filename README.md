@@ -65,19 +65,21 @@ Tools (z. B. der Jugger Randomizer) werden als Git‑Submodule unter `external/t
 
 ### Setup
 
-Im Repo ausführen:
+- Das Jugger Lineup Randomizer Tool lebt jetzt im Monorepo [juggertools](https://github.com/DasRind/juggertools) (Projekt `lineup-randomizer`).
+- Binde es als Submodule ein (SSH empfohlen, damit vorhandene Zertifikate greifen):
+  ```bash
+  git submodule add git@github.com:DasRind/juggertools.git external/tools/randomizer
+  git submodule update --init --recursive
+  git -C external/tools/randomizer checkout main
+  ```
+- Danach im Submodule einmalig Dependencies installieren (`cd external/tools/randomizer && npm ci`).
 
-```bash
-git submodule add https://github.com/DasRind/JuggerRandomizedLineupGenerator.git external/tools/randomizer
-git submodule update --init --recursive
-```
-
-Falls das Tool einen Build benötigt, erzeugt das Submodule typischerweise `docs/`, `dist/` oder `build/`.
+Falls ein anderes Tool ein separates Repo nutzt, leg es ebenfalls unter `external/tools/<slug>` als Submodule an.
 
 ### Build & Sync
 
-- `npm run tools:build` – baut alle Submodule, wenn `package.json#scripts.build` vorhanden ist.
-- `npm run tools:sync` – kopiert inkrementell aus `external/tools/<slug>/{docs|dist|build|.}` nach `public/embeds/<slug>`.
+- `npm run tools:build` – baut alle konfigurierten Tools; der Randomizer nutzt `npx nx run lineup-randomizer:build:production` (Fallback: `npm run build`).
+- `npm run tools:sync` – kopiert inkrementell aus dem jeweiligen Build‑Output (z. B. `external/tools/randomizer/dist/lineup-randomizer/browser`) nach `public/embeds/<slug>`.
 - `npm run tools:prepare` – führt Build und Sync nacheinander aus.
 - `npm run tools:update` – zieht neue Commits in allen Submodules (`git submodule update --remote --merge --recursive`).
 - `npm run tools:refresh` – Update + Prepare in einem Rutsch.
@@ -90,24 +92,23 @@ Falls das Tool einen Build benötigt, erzeugt das Submodule typischerweise `docs
 ### Skripte im Detail
 
 - `scripts/tools-build.mjs`
-  - Baut Submodules, wenn ein `package.json` mit `scripts.build` vorhanden ist.
+  - Baut konfigurierte Repositories (z. B. Submodules unter `external/tools/<slug>`).
   - Führt bei fehlendem `node_modules` automatisch `npm ci` aus.
   - Lässt reine HTML/Static‑Repos unangetastet (kein Build nötig).
 
 - `scripts/tools-sync.mjs`
-  - Sucht in `external/tools/<slug>` nach fertigen Build‑Ordnern (`docs`, `dist`, `build`).
-  - Findet `index.html` bis zu zwei Ebenen tief (z. B. `dist/<name>/browser/`).
+  - Sucht im konfigurierten Build‑Output (z. B. `external/tools/randomizer/dist/lineup-randomizer/browser`) nach einem fertigen `index.html`.
   - Überspringt Dev‑Indizes (Vite/Webpack/HMR/localhost), um Reload‑Loops zu verhindern.
-  - Kopiert nach `public/embeds/<slug>` und speichert den Submodule‑Commit in `.tools-sync/<slug>.rev`.
+  - Kopiert nach `public/embeds/<slug>` und speichert den zugehörigen Commit in `.tools-sync/<slug>.rev`.
   - Inkrementell: Kopiert nur bei geändertem Commit; per `FORCE=1` lässt sich Kopie erzwingen.
 
 ### Typischer Workflow
 
-1) Submodule anlegen (einmalig)
-```bash
-git submodule add <repo-url> external/tools/<slug>
-git submodule update --init --recursive
-```
+1) Externes Tool anbinden
+   ```bash
+   git submodule add <repo-url> external/tools/<slug>
+   git submodule update --init --recursive
+   ```
 
 2) Bauen & Kopieren
 ```bash

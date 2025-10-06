@@ -30,8 +30,9 @@ const tools = [
   {
     slug: 'randomizer',
     cwd: 'external/tools/randomizer',
-    // Auto mode: run npm ci (if needed) and npm run build
     build: undefined,
+    ensureNodeModules: true,
+    nxTarget: 'lineup-randomizer:build:production',
   },
 ];
 
@@ -63,28 +64,40 @@ for (const t of tools) {
   }
 
   const pkgPath = path.join(repoDir, 'package.json');
-  if (!fs.existsSync(pkgPath)) {
-    console.log(`[tools-build] ${t.slug}: no package.json found -> skipping build (probably static).`);
+  const hasPackageJson = fs.existsSync(pkgPath);
+  const pkg = hasPackageJson ? JSON.parse(fs.readFileSync(pkgPath, 'utf8')) : null;
+  const hasBuildScript = Boolean(pkg?.scripts?.build);
+
+  if (t.ensureNodeModules && hasPackageJson) {
+    const nm = path.join(repoDir, 'node_modules');
+    if (!fs.existsSync(nm)) {
+      console.log(`[tools-build] ${t.slug}: npm ci (${t.cwd})`);
+      try {
+        run(npmCmd, ['ci'], { cwd: repoDir });
+      } catch (error) {
+        console.warn(`[tools-build] ${t.slug}: npm ci failed (${error.message}). Retrying with npm install --legacy-peer-deps.`);
+        run(npmCmd, ['install', '--legacy-peer-deps'], { cwd: repoDir });
+      }
+    } else {
+      console.log(`[tools-build] ${t.slug}: node_modules present -> skipping install.`);
+    }
+  }
+
+  const hasNx = fs.existsSync(path.join(repoDir, 'nx.json'));
+  if (hasNx && t.nxTarget) {
+    const npxCmd = isWin ? 'npx.cmd' : 'npx';
+    console.log(`[tools-build] ${t.slug}: npx nx run ${t.nxTarget}`);
+    run(npxCmd, ['nx', 'run', t.nxTarget], { cwd: repoDir });
     continue;
   }
-  const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
-  const hasBuild = pkg.scripts && pkg.scripts.build;
 
-  if (!hasBuild) {
-    console.log(`[tools-build] ${t.slug}: no build script -> skipping.`);
+  if (hasBuildScript) {
+    console.log(`[tools-build] ${t.slug}: npm run build`);
+    run(npmCmd, ['run', 'build'], { cwd: repoDir });
     continue;
   }
 
-  const nm = path.join(repoDir, 'node_modules');
-  if (!fs.existsSync(nm)) {
-    console.log(`[tools-build] ${t.slug}: npm ci`);
-    run(npmCmd, ['ci'], { cwd: repoDir });
-  } else {
-    console.log(`[tools-build] ${t.slug}: node_modules present -> skipping install.`);
-  }
-
-  console.log(`[tools-build] ${t.slug}: npm run build`);
-  run(npmCmd, ['run', 'build'], { cwd: repoDir });
+  console.log(`[tools-build] ${t.slug}: no recognized build target -> skipping.`);
 }
 
 console.log('[tools-build] Done.');
