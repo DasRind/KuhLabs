@@ -21,6 +21,12 @@ const tools = [
     commitPaths: ['lineup-randomizer'],
     limit: 3,
   },
+  {
+    slug: 'swarm-demos',
+    repoUrl: 'https://github.com/DasRind/swarmDemos',
+    gitCwd: 'external/tools/swarm-demos',
+    limit: 3,
+  },
 ];
 
 const targetFile = path.resolve(repoRoot, 'src/app/tools/tool-commits.ts');

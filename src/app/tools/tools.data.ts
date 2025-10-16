@@ -25,11 +25,20 @@ export const TOOLS: ToolDefinition[] = [
     repoUrl: 'https://github.com/DasRind/KuhLabs',
     lastCommits: TOOL_COMMITS['randomizer'] ?? [],
   },
+  {
+    slug: 'swarm-demos',
+    title: 'Swarm Demos',
+    description:
+      'Canvas-basierte Simulationen rund um Schwarmintelligenz und Robotik.',
+    externalUrl: 'embeds/swarm-demos/index.html',
+    tags: ['swarm', 'tools'],
+    repoUrl: 'https://github.com/DasRind/swarmDemos',
+    lastCommits: TOOL_COMMITS['swarm-demos'] ?? [],
+  },
 ];
 
 export function getToolBySlug(slug: string): ToolDefinition | undefined {
   return TOOLS.find((t) => t.slug === slug);
 }
-
 
 

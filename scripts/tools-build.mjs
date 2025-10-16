@@ -34,6 +34,12 @@ const tools = [
     ensureNodeModules: true,
     nxTarget: 'lineup-randomizer:build:production',
   },
+  {
+    slug: 'swarm-demos',
+    cwd: 'external/tools/swarm-demos',
+    build: undefined,
+    ensureNodeModules: true,
+  },
 ];
 
 // Run helper that aborts on non-zero exit codes

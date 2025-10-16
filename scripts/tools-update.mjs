@@ -20,6 +20,12 @@ const tools = [
     remote: 'origin',
     branch: 'main',
   },
+  {
+    slug: 'swarm-demos',
+    cwd: 'external/tools/swarm-demos',
+    remote: 'origin',
+    branch: 'main',
+  },
 ];
 
 const repoRoot = process.cwd();

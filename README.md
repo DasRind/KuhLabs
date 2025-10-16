@@ -58,6 +58,10 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 
 Tools (z. B. der Jugger Randomizer) werden als Git‑Submodule unter `external/tools/<slug>` eingebunden und beim Build/Start in `public/embeds/<slug>` synchronisiert. Die App lädt sie dann per iframe unter `/tools/<slug>`.
 
+- Aktuell eingebundene Slugs:
+  - `randomizer` – Jugger Lineup Generator (Nx-Workspace `juggertools`, Build: `dist/lineup-randomizer/browser`)
+  - `swarm-demos` – Canvas-Demos zur Schwarmintelligenz (Angular, Build: `dist/swarmDemos/browser`)
+
 - Routes: `src/app/app.routes.ts` (`/tools`, `/tools/:slug`)
 - Tools-Liste: `src/app/tools/tools-list.component.ts`
 - Tool-Embed: `src/app/tools/tool-embed.component.ts`
@@ -83,6 +87,13 @@ Falls ein anderes Tool ein separates Repo nutzt, leg es ebenfalls unter `externa
 - `npm run tools:prepare` – führt Build und Sync nacheinander aus.
 - `npm run tools:update` – zieht neue Commits in allen Submodules (`git submodule update --remote --merge --recursive`).
 - `npm run tools:refresh` – Update + Prepare in einem Rutsch.
+
+#### Swarm Demos (`swarm-demos`)
+
+- Lives im Submodule `external/tools/swarm-demos` (Angular 20).
+- Standard-Build via `npm run build` → Output `dist/swarmDemos/browser`.
+- Sync landet in `public/embeds/swarm-demos`, Route `/tools/swarm-demos`.
+- Für lokale Anpassungen: `cd external/tools/swarm-demos && ng serve` für Live-Vorschau; anschließend `npm run tools:prepare`.
 
 ### Was sind .mjs Dateien?
 

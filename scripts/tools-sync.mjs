@@ -43,6 +43,19 @@ const tools = [
     ],
     destRoot: 'public/embeds/randomizer',
   },
+  {
+    slug: 'swarm-demos',
+    srcRoot: 'external/tools/swarm-demos',
+    gitDir: 'external/tools/swarm-demos',
+    candidates: [
+      'dist/swarmDemos/browser',
+      'dist/swarm-demos/browser',
+      'dist/browser',
+      'docs',
+      'build',
+    ],
+    destRoot: 'public/embeds/swarm-demos',
+  },
 ];
 
 // Rekursive Kopie mit kleinen AusschlÃ¼ssen (VCS/CI/node_modules)
