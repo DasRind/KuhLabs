@@ -1,3 +1,6 @@
 [submodule "external/tools/randomizer"]
 	path = external/tools/randomizer
 	url = git@github.com:DasRind/juggertools.git
+[submodule "external/tools/swarm-demos"]
+	path = external/tools/swarm-demos
+	url = ../swarmDemos
