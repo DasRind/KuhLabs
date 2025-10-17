@@ -37,7 +37,7 @@ const tools = [
   {
     slug: 'swarm-demos',
     cwd: 'external/tools/swarm-demos',
-    build: undefined,
+    build: 'npm run build -- --configuration production --base-href ./',
     ensureNodeModules: true,
   },
 ];
