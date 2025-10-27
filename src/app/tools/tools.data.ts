@@ -31,7 +31,8 @@ export const TOOLS: ToolDefinition[] = [
     description:
       'Canvas-basierte Simulationen rund um Schwarmintelligenz und Robotik.',
     externalUrl: 'embeds/swarm-demos/index.html',
-    tags: ['swarm', 'tools'],
+    tags: ['tools', 'games'],
+    icon: 'assets/tools/swarm-demos/swarmDemos.png',
     repoUrl: 'https://github.com/DasRind/swarmDemos',
     lastCommits: TOOL_COMMITS['swarm-demos'] ?? [],
   },
@@ -40,5 +41,3 @@ export const TOOLS: ToolDefinition[] = [
 export function getToolBySlug(slug: string): ToolDefinition | undefined {
   return TOOLS.find((t) => t.slug === slug);
 }
-
-
