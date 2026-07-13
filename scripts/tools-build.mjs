@@ -37,9 +37,9 @@ const tools = [
   {
     slug: 'tactics',
     cwd: 'external/tools/randomizer',
-    build: undefined,
+    build: 'npx nx run tactics:build:production --base-href ./',
     ensureNodeModules: true,
-    nxTarget: 'tactics:build:production',
+    nxTarget: undefined,
   },
   {
     slug: 'swarm-demos',

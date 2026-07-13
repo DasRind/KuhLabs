@@ -98,6 +98,20 @@ const copyRecursive = (src, dest) => {
   }
 };
 
+const normalizeEmbedBaseHref = (rootDir) => {
+  for (const fileName of ['index.html', 'index.csr.html']) {
+    const filePath = path.join(rootDir, fileName);
+    if (!fs.existsSync(filePath)) continue;
+    try {
+      const source = fs.readFileSync(filePath, 'utf8');
+      const normalized = source.replace(/<base href="\/">/g, '<base href="./">');
+      if (normalized !== source) {
+        fs.writeFileSync(filePath, normalized, 'utf8');
+      }
+    } catch {}
+  }
+};
+
 // Ablage fÃ¼r den zuletzt synchronisierten Commit je Tool
 const stateDir = path.resolve('.tools-sync');
 fs.mkdirSync(stateDir, { recursive: true });
@@ -168,6 +182,7 @@ for (const t of tools) {
   console.log(`[tools-sync] Kopiere ${sourceDir} â†’ ${dest}`);
   fs.rmSync(dest, { recursive: true, force: true });
   copyRecursive(sourceDir, dest);
+  normalizeEmbedBaseHref(dest);
   changed = true;
 
   if (head && head !== 'unknown') {
