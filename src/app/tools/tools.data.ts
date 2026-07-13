@@ -26,6 +26,16 @@ export const TOOLS: ToolDefinition[] = [
     lastCommits: TOOL_COMMITS['randomizer'] ?? [],
   },
   {
+    slug: 'tactics',
+    title: 'Jugger Tactics Tool',
+    description:
+      'Plant Spielzüge und taktische Abläufe für Jugger-Teams direkt im Browser.',
+    externalUrl: 'embeds/tactics/index.html',
+    tags: ['jugger', 'tools'],
+    repoUrl: 'https://github.com/DasRind/juggertools',
+    lastCommits: TOOL_COMMITS['tactics'] ?? [],
+  },
+  {
     slug: 'swarm-demos',
     title: 'Swarm Demos',
     description:
@@ -35,6 +45,17 @@ export const TOOLS: ToolDefinition[] = [
     icon: 'assets/tools/swarm-demos/swarmDemos.png',
     repoUrl: 'https://github.com/DasRind/swarmDemos',
     lastCommits: TOOL_COMMITS['swarm-demos'] ?? [],
+  },
+  {
+    slug: 'thomex',
+    title: 'Thomex',
+    description:
+      'Interaktive Visualisierungen und Schritt-für-Schritt-Loesungen fuer Algorithmen und Optimierungsverfahren.',
+    externalUrl: 'embeds/thomex/index.html',
+    tags: ['tools'],
+    icon: 'assets/tools/thomex/thomex-logo.png',
+    repoUrl: 'https://github.com/DasRind/thomex',
+    lastCommits: TOOL_COMMITS['thomex'] ?? [],
   },
 ];
 

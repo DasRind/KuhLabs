@@ -35,8 +35,21 @@ const tools = [
     nxTarget: 'lineup-randomizer:build:production',
   },
   {
+    slug: 'tactics',
+    cwd: 'external/tools/randomizer',
+    build: undefined,
+    ensureNodeModules: true,
+    nxTarget: 'tactics:build:production',
+  },
+  {
     slug: 'swarm-demos',
     cwd: 'external/tools/swarm-demos',
+    build: 'npm run build -- --configuration production --base-href ./',
+    ensureNodeModules: true,
+  },
+  {
+    slug: 'thomex',
+    cwd: 'external/tools/thomex',
     build: 'npm run build -- --configuration production --base-href ./',
     ensureNodeModules: true,
   },

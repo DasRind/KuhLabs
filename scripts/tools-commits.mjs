@@ -22,9 +22,22 @@ const tools = [
     limit: 3,
   },
   {
+    slug: 'tactics',
+    repoUrl: 'https://github.com/DasRind/juggertools',
+    gitCwd: 'external/tools/randomizer',
+    commitPaths: ['tactics'],
+    limit: 3,
+  },
+  {
     slug: 'swarm-demos',
     repoUrl: 'https://github.com/DasRind/swarmDemos',
     gitCwd: 'external/tools/swarm-demos',
+    limit: 3,
+  },
+  {
+    slug: 'thomex',
+    repoUrl: 'https://github.com/DasRind/thomex',
+    gitCwd: 'external/tools/thomex',
     limit: 3,
   },
 ];

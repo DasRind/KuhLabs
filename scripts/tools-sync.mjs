@@ -44,6 +44,18 @@ const tools = [
     destRoot: 'public/embeds/randomizer',
   },
   {
+    slug: 'tactics',
+    srcRoot: 'external/tools/randomizer',
+    gitDir: 'external/tools/randomizer',
+    candidates: [
+      'dist/tactics/browser',
+      'dist/tactics',
+      'docs',
+      'build',
+    ],
+    destRoot: 'public/embeds/tactics',
+  },
+  {
     slug: 'swarm-demos',
     srcRoot: 'external/tools/swarm-demos',
     gitDir: 'external/tools/swarm-demos',
@@ -55,6 +67,18 @@ const tools = [
       'build',
     ],
     destRoot: 'public/embeds/swarm-demos',
+  },
+  {
+    slug: 'thomex',
+    srcRoot: 'external/tools/thomex',
+    gitDir: 'external/tools/thomex',
+    candidates: [
+      'dist/thomex/browser',
+      'dist/browser',
+      'docs',
+      'build',
+    ],
+    destRoot: 'public/embeds/thomex',
   },
 ];
 

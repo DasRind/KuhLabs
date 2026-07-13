@@ -60,7 +60,9 @@ Tools (z. B. der Jugger Randomizer) werden als Git‑Submodule unter `external/t
 
 - Aktuell eingebundene Slugs:
   - `randomizer` – Jugger Lineup Generator (Nx-Workspace `juggertools`, Build: `dist/lineup-randomizer/browser`)
+  - `tactics` – Jugger Tactics Tool (Nx-Workspace `juggertools`, Build: `dist/tactics/browser`)
   - `swarm-demos` – Canvas-Demos zur Schwarmintelligenz (Angular, Build: `dist/swarmDemos/browser`)
+  - `thomex` – Visualisierungen und interaktive Solver fuer Algorithmen und Optimierungsverfahren (Angular, Build: `dist/thomex/browser`)
 
 - Routes: `src/app/app.routes.ts` (`/tools`, `/tools/:slug`)
 - Tools-Liste: `src/app/tools/tools-list.component.ts`
@@ -69,7 +71,7 @@ Tools (z. B. der Jugger Randomizer) werden als Git‑Submodule unter `external/t
 
 ### Setup
 
-- Das Jugger Lineup Randomizer Tool lebt jetzt im Monorepo [juggertools](https://github.com/DasRind/juggertools) (Projekt `lineup-randomizer`).
+- Die Jugger Tools leben jetzt im Monorepo [juggertools](https://github.com/DasRind/juggertools) (Projekte `lineup-randomizer` und `tactics`).
 - Binde es als Submodule ein (SSH empfohlen, damit vorhandene Zertifikate greifen):
   ```bash
   git submodule add git@github.com:DasRind/juggertools.git external/tools/randomizer
@@ -82,7 +84,7 @@ Falls ein anderes Tool ein separates Repo nutzt, leg es ebenfalls unter `externa
 
 ### Build & Sync
 
-- `npm run tools:build` – baut alle konfigurierten Tools; der Randomizer nutzt `npx nx run lineup-randomizer:build:production` (Fallback: `npm run build`).
+- `npm run tools:build` – baut alle konfigurierten Tools; die Juggertools nutzen `npx nx run lineup-randomizer:build:production` und `npx nx run tactics:build:production` (Fallback: `npm run build`).
 - `npm run tools:sync` – kopiert inkrementell aus dem jeweiligen Build‑Output (z. B. `external/tools/randomizer/dist/lineup-randomizer/browser`) nach `public/embeds/<slug>`.
 - `npm run tools:prepare` – führt Build und Sync nacheinander aus.
 - `npm run tools:update` – zieht neue Commits in allen Submodules (`git submodule update --remote --merge --recursive`).
@@ -94,6 +96,19 @@ Falls ein anderes Tool ein separates Repo nutzt, leg es ebenfalls unter `externa
 - Standard-Build via `npm run build` → Output `dist/swarmDemos/browser`.
 - Sync landet in `public/embeds/swarm-demos`, Route `/tools/swarm-demos`.
 - Für lokale Anpassungen: `cd external/tools/swarm-demos && ng serve` für Live-Vorschau; anschließend `npm run tools:prepare`.
+
+#### Thomex (`thomex`)
+
+- Externes Repo: [DasRind/thomex](https://github.com/DasRind/thomex).
+- Einbindung wie die anderen externen Tools unter `external/tools/thomex`.
+- Beispiel-Setup:
+  ```bash
+  git submodule add git@github.com:DasRind/thomex.git external/tools/thomex
+  git submodule update --init --recursive
+  ```
+- Standard-Build via `npm run build -- --configuration production --base-href ./` -> Output `dist/thomex/browser`.
+- Sync landet in `public/embeds/thomex`, Route `/tools/thomex`.
+- Für lokale Anpassungen: `cd external/tools/thomex && ng serve`; danach in KuhLabs `npm run tools:prepare`.
 
 ### Was sind .mjs Dateien?
 
@@ -115,24 +130,28 @@ Falls ein anderes Tool ein separates Repo nutzt, leg es ebenfalls unter `externa
 
 ### Typischer Workflow
 
-1) Externes Tool anbinden
+1. Externes Tool anbinden
+
    ```bash
    git submodule add <repo-url> external/tools/<slug>
    git submodule update --init --recursive
    ```
 
-2) Bauen & Kopieren
+2. Bauen & Kopieren
+
 ```bash
 npm run tools:prepare
 ```
 
-3) Starten
+3. Starten
+
 ```bash
 ng serve
 # http://localhost:4200/tools/<slug>
 ```
 
-4) Updates aus Submodules einziehen
+4. Updates aus Submodules einziehen
+
 ```bash
 npm run tools:refresh
 ```
@@ -159,9 +178,9 @@ ng serve
 
 ### Weiteres Tool hinzufügen
 
-1) Submodule hinzufügen nach `external/tools/<slug>`
-2) In `src/app/tools/tools.data.ts` neuen Eintrag anlegen (`slug`, `title`, `description`, `externalUrl: '/embeds/<slug>/index.html'`).
-3) `npm run tools:prepare` ausführen.
+1. Submodule hinzufügen nach `external/tools/<slug>`
+2. In `src/app/tools/tools.data.ts` neuen Eintrag anlegen (`slug`, `title`, `description`, `externalUrl: '/embeds/<slug>/index.html'`).
+3. `npm run tools:prepare` ausführen.
 
 Hinweis: Assets liegen bewusst unter `/embeds/<slug>`, um Kollisionen mit Angular‑Routen wie `/tools/:slug` zu vermeiden (dev‑Server könnte sonst Directory‑Index ausliefern).
 

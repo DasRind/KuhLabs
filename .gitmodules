@@ -4,3 +4,6 @@
 [submodule "external/tools/swarm-demos"]
 	path = external/tools/swarm-demos
 	url = ../swarmDemos
+[submodule "external/tools/thomex"]
+	path = external/tools/thomex
+	url = git@github.com:DasRind/thomex.git
